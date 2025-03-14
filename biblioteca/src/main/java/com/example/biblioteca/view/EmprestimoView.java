@@ -3,6 +3,7 @@ package com.example.biblioteca.view;
 import com.example.biblioteca.controller.EmprestimoController;
 import com.example.biblioteca.model.Emprestimo;
 import com.example.biblioteca.model.Livro;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,7 +13,6 @@ import java.util.List;
 public class EmprestimoView {
 
     EmprestimoController emprestimoController = new EmprestimoController();
-
 
     //mostrar todos emprestimos
     @GetMapping
@@ -25,8 +25,6 @@ public class EmprestimoView {
             return emprestimoController.getAll();
         }
     }
-
-
 
     //inserir emprestimo
     @PostMapping
@@ -41,18 +39,19 @@ public class EmprestimoView {
     }
 
     //atualizar data final
-    @PutMapping("/{dataFim}/livro")
-    public boolean updateFinalData( @RequestBody Emprestimo emprestimo, @PathVariable String dataFim){
-        return emprestimoController.updateFinalData(dataFim);
+    @PutMapping("/{idEmprestimo}/dataFim")
+    public boolean updateFinalData(@PathVariable Long idEmprestimo, @RequestBody String novaDataFim) {
+        return emprestimoController.updateFinalData(idEmprestimo, novaDataFim);
     }
-
 
     //deletar emprestimo
-    @DeleteMapping("/{idEmprestimo}/")
-    public boolean delete(@PathVariable Long idEmprestimo){
-        return emprestimoController.delete(idEmprestimo);
+    @DeleteMapping("/{idEmprestimo}")
+    public ResponseEntity<String> delete(@PathVariable Long idEmprestimo) {
+        boolean sucesso = emprestimoController.delete(idEmprestimo);
+        if (sucesso) {
+            return ResponseEntity.ok("Empréstimo removido com sucesso!");
+        } else {
+            return ResponseEntity.badRequest().body("Erro: Empréstimo não encontrado.");
+        }
     }
-
-
-
 }

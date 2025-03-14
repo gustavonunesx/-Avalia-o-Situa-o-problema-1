@@ -33,14 +33,16 @@ public class EmprestimoController {
     }
 
     //atualizar data final
-    public boolean updateFinalData(String dataFim){
-        return empRepository.updateFinalData(dataFim);
+    public boolean updateFinalData(Long idEmprestimo, String novaDataFim) {
+        return empRepository.updateFinalData(idEmprestimo, novaDataFim);
     }
+
+
 
     //deletar emrpstimo
 
-     public boolean delete(Long idEmprestimo){
-       return empRepository.delete(idEmprestimo);
+    public boolean delete(Long idEmprestimo) {
+        return empRepository.delete(idEmprestimo);
     }
 
 

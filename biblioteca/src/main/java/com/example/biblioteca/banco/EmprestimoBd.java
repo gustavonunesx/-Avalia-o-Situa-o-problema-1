@@ -1,6 +1,5 @@
 package com.example.biblioteca.banco;
 
-import com.example.biblioteca.model.Cliente;
 import com.example.biblioteca.model.Emprestimo;
 import com.example.biblioteca.model.Livro;
 
@@ -39,7 +38,7 @@ public class EmprestimoBd {
     //inserir outro livro em um emprestimo existente
     public Emprestimo insertLivro(Long idEmprestimo, Livro livro){
         Emprestimo emprestimo = emprestimos.stream()
-                .filter(e -> e.getIdEmprestimo() == idEmprestimo)
+                .filter(e -> e.getIdEmprestimo().equals(idEmprestimo))
                 .findFirst()
                 .orElse(null);
 
@@ -55,33 +54,37 @@ public class EmprestimoBd {
 
 
     //atualizar DATA FINAL
-    public boolean updateFinalData(String dataFim){
-       Emprestimo emprestimo = emprestimos.stream()
-               .filter(e -> e.getDataFim() == dataFim)
-               .findFirst()
-               .orElse(null);
-
-        if (emprestimo == null){
-            return false;
-        }
-
-        emprestimo.setDataFim(emprestimo.getDataFim());
-
-        return  true;
-    }
-
-    //deletar emprestimo
-
-    public boolean delete(Long idEmprestimo){
-        Emprestimo emprestimoBd = emprestimos.stream()
-                .filter(e -> e.getIdEmprestimo() == idEmprestimo)
+    public boolean updateFinalData(Long idEmprestimo, String novaDataFim) {
+        Emprestimo emprestimo = emprestimos.stream()
+                .filter(e -> e.getIdEmprestimo().equals(idEmprestimo))
                 .findFirst()
                 .orElse(null);
 
-        emprestimos.remove(emprestimoBd);
+        if (emprestimo == null) {
+            return false; // Retorna falso se o empréstimo não for encontrado
+        }
 
+        emprestimo.setDataFim(novaDataFim); // Atualiza a data final
         return true;
     }
+
+
+    //deletar emprestimo
+
+    public boolean delete(Long idEmprestimo) {
+        Emprestimo emprestimo = emprestimos.stream()
+                .filter(e -> e.getIdEmprestimo().equals(idEmprestimo))
+                .findFirst()
+                .orElse(null);
+
+        if (emprestimo == null) {
+            return false; // Retorna falso se não encontrar o empréstimo
+        }
+
+        emprestimos.remove(emprestimo);
+        return true; // Retorna verdadeiro se deletou com sucesso
+    }
+
 
 
 }
